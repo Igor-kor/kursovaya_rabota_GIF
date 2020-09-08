@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,14 +14,15 @@ namespace kursovaya_rabota_3_semestr
         // Логический дескриптор экрана
         Descriptor descriptor;
         //Глобальная палитра
-        ColorPalette globalPalette;
+        public ColorPalette globalPalette;
         //Блоки расширения
         Extension[] extensions;
         //Блок изображения
-        Picture[] pictures;
+        public Picture[] pictures;
         // Блок завершения файла
         byte endfile = 0x3B; //(;)
-       
+        public string text;
+
         public Gif()
         {
             // Выбран GIF89a т.к. задание предпологает анимированное изображение
@@ -28,7 +30,7 @@ namespace kursovaya_rabota_3_semestr
             descriptor = new Descriptor();
             globalPalette = new ColorPalette();
             extensions = new Extension[] { };
-            pictures = new Picture[] { new Picture()};
+            pictures = new Picture[] { new Picture() };
         }
 
         public byte[] Generate()
@@ -44,7 +46,7 @@ namespace kursovaya_rabota_3_semestr
             foreach (Picture e in pictures)
             {
                 bytes.AddRange(e.GetBytes());
-            }         
+            }
             bytes.Add(endfile);
 
             return bytes.ToArray();
@@ -53,35 +55,191 @@ namespace kursovaya_rabota_3_semestr
         public byte[] TestGenerate()
         {
             globalPalette = new ColorPalette();
-            globalPalette.colors.Add(new Color(0x0A,0xB2,0x5D));
-            globalPalette.colors.Add(new Color(0xC8, 0xA6, 0x2D));
-            globalPalette.colors.Add(new Color(0xF3, 0xED, 0x63));
-            globalPalette.colors.Add(new Color(0xBA, 0x60, 0xA5));
-            globalPalette.colors.Add(new Color(0x00, 0x80, 0xC8));
-            globalPalette.colors.Add(new Color(0xF1, 0x60, 0x22));
-            globalPalette.colors.Add(new Color(0x00, 0x00, 0x00));
-            globalPalette.colors.Add(new Color(0xFF, 0xFF, 0xFF));
+            globalPalette.colors.Add(new Color(0x0A, 0xB2, 0x5D));
+           
+
             pictures[0].pictureDescriptor.Left = 0;
             pictures[0].pictureDescriptor.Top = 0;
-            pictures[0].pictureDescriptor.W = 4;
-            pictures[0].pictureDescriptor.H = 4;
+            pictures[0].pictureDescriptor.W = 64;
+            pictures[0].pictureDescriptor.H = 64;
             pictures[0].pictureDescriptor.CT = 0;
             pictures[0].pictureDescriptor.Size = 0;
             pictures[0].pictureDescriptor.SF = 0;
             pictures[0].pictureDescriptor.I = 0;
-            pictures[0].subblocks = new SubblockPicture[] {new SubblockPicture() };
-            pictures[0].MC = 0x03;
-            pictures[0].subblocks[0].S = 0x08;
-            pictures[0].subblocks[0].block = new byte[] { 0x08, 0x0A, 0xD2, 0x42, 0x90, 0x94, 0x59, 0x12 };
+            
+
+
+            Bitmap myBitmap = new Bitmap("Grapes.jpg");
+            //globalPalette = GeneratePalette(myBitmap); 
+            List<byte> compresedbmp = Compress("0000000000000000000000000000000000000000000000000000000000000000" +
+                "0000000000000000000000000000000000000000000000000000000000000000" +
+                 "0000000000000000000000000000000000000000000000000000000000000000" +
+                  "0000000000000000000000000000000000000000000000000000000000000000" +
+                   "0000000000000000000000000000000000000000000000000000000000000000" +
+                    "0000000000000000000000000000000000000000000000000000000000000000" +
+                     "0000000000000000000000000000000000000000000000000000000000000000" +
+                      "0000000000000000000000000000000000000000000000000000000000000000" +
+                       "0000000000000000000000000000000000000000000000000000000000000000" +
+                        "0000000000000000000000000000000000000000000000000000000000000000" +
+                         "0000000000000000000000000000000000000000000000000000000000000000" +
+                          "0000000000000000000000000000000000000000000000000000000000000000" +
+                 "0000000000000000000000000000000000000000000000000000000000000000" +
+                  "0000000000000000000000000000000000000000000000000000000000000000" +
+                   "0000000000000000000000000000000000000000000000000000000000000000" +
+                    "0000000000000000000000000000000000000000000000000000000000000000" +
+                     "0000000000000000000000000000000000000000000000000000000000000000" +
+                      "0000000000000000000000000000000000000000000000000000000000000000" +
+                       "0000000000000000000000000000000000000000000000000000000000000000" +
+                        "0000000000000000000000000000000000000000000000000000000000000000" +
+                         "0000000000000000000000000000000000000000000000000000000000000000" +
+                          "0000000000000000000000000000000000000000000000000000000000000000" +
+                 "0000000000000000000000000000000000000000000000000000000000000000" +
+                  "0000000000000000000000000000000000000000000000000000000000000000" +
+                   "0000000000000000000000000000000000000000000000000000000000000000" +
+                    "0000000000000000000000000000000000000000000000000000000000000000" +
+                     "0000000000000000000000000000000000000000000000000000000000000000" +
+                      "0000000000000000000000000000000000000000000000000000000000000000" +
+                       "0000000000000000000000000000000000000000000000000000000000000000" +
+                        "0000000000000000000000000000000000000000000000000000000000000000" +
+                         "0000000000000000000000000000000000000000000000000000000000000000" +
+                          "0000000000000000000000000000000000000000000000000000000000000000" +
+                 "0000000000000000000000000000000000000000000000000000000000000000" +
+                  "0000000000000000000000000000000000000000000000000000000000000000" +
+                   "0000000000000000000000000000000000000000000000000000000000000000" +
+                    "0000000000000000000000000000000000000000000000000000000000000000" +
+                     "0000000000000000000000000000000000000000000000000000000000000000" +
+                      "0000000000000000000000000000000000000000000000000000000000000000" +
+                       "0000000000000000000000000000000000000000000000000000000000000000" +
+                        "0000000000000000000000000000000000000000000000000000000000000000" +
+                         "0000000000000000000000000000000000000000000000000000000000000000" +
+                          "0000000000000000000000000000000000000000000000000000000000000000" +
+                 "0000000000000000000000000000000000000000000000000000000000000000" +
+                  "0000000000000000000000000000000000000000000000000000000000000000" +
+                   "0000000000000000000000000000000000000000000000000000000000000000" +
+                    "0000000000000000000000000000000000000000000000000000000000000000" +
+                     "0000000000000000000000000000000000000000000000000000000000000000" +
+                      "0000000000000000000000000000000000000000000000000000000000000000" +
+                       "0000000000000000000000000000000000000000000000000000000000000000" +
+                        "0000000000000000000000000000000000000000000000000000000000000000" +
+                         "0000000000000000000000000000000000000000000000000000000000000000" +
+                          "0000000000000000000000000000000000000000000000000000000000000000" +
+                 "0000000000000000000000000000000000000000000000000000000000000000" +
+                  "0000000000000000000000000000000000000000000000000000000000000000" +
+                   "0000000000000000000000000000000000000000000000000000000000000000" +
+                    "0000000000000000000000000000000000000000000000000000000000000000" +
+                     "0000000000000000000000000000000000000000000000000000000000000000" +
+                      "0000000000000000000000000000000000000000000000000000000000000000" +
+                       "0000000000000000000000000000000000000000000000000000000000000000" +
+                        "0000000000000000000000000000000000000000000000000000000000000000" +
+                         "0000000000000000000000000000000000000000000000000000000000000000" +
+                         "0000000000000000000000000000000000000000000000000000000000000000" +
+                  "0000000000000000000000000000000000000000000000000000000000000000" +
+                   "0000000000000000000000000000000000000000000000000000000000000000" +
+                    "0000000000000000000000000000000000000000000000000000000000000000" );
+           
+            pictures[0].MC = 0x01;
+
+            byte[] bmp = compresedbmp.ToArray();
+            int count = 0, countblock = 0 ;
+            pictures[0].subblocks = new SubblockPicture[bmp.Length/256+1];
+            for (int i = 0; i < bmp.Length; i+=256)
+            {
+                pictures[0].subblocks[count] = new SubblockPicture();
+                pictures[0].subblocks[count].block = new byte[((bmp.Length - (count * 256)) > 256) ? 256:91] ;
+                for(int k = i;k < i + 256 && k < bmp.Length; k++)
+                {
+                    pictures[0].subblocks[count].block[k%256] = bmp[k];
+                    countblock++;
+                }
+                pictures[0].subblocks[0].S = (byte)(countblock);
+                count++;
+                countblock = 0;
+            }
+
+            text = BitConverter.ToString( compresedbmp.ToArray());
+
             descriptor.CT = 1;
             descriptor.SF = 0;
-            descriptor.Size = 0b10;
-            descriptor.Color = 0b10;
-            descriptor.W = 4;
-            descriptor.H = 4;
+            descriptor.Size = 0b01;
+            descriptor.Color = 0b01;
+            descriptor.W = (byte)myBitmap.Height;
+            descriptor.H = (byte)myBitmap.Width;
+            //return Compress(GenerateImageWidthPalete(myBitmap, globalPalette)).ToArray();
+
+            pictures[0].pictureDescriptor.W = (byte)myBitmap.Height;
+            pictures[0].pictureDescriptor.H = (byte)myBitmap.Width;
 
             return Generate();
         }
+
+        public ColorPalette GeneratePalette(Bitmap myBitmap)
+        {
+            ColorPalette colorPalette = new ColorPalette();
+            colorPalette.colors = new List<Color>();
+            for (int i = 0; i < myBitmap.Width; i++)
+            {
+                for (int j = 0; j < myBitmap.Height; j++)
+                {
+                    System.Drawing.Color pixelColor = myBitmap.GetPixel(i, j);
+                    Color pixel = new Color(pixelColor.R, pixelColor.G, pixelColor.B);
+                    if (colorPalette.colors.Find(x => x.Contains(pixel)) == null )
+                    {
+                        colorPalette.colors.Add(pixel);
+                    }
+                }
+            }
+            return colorPalette;
+        }
+
+        public string GenerateImageWidthPalete(Bitmap myBitmap, ColorPalette colorPalette)
+        {
+            string image = "";
+            for (int i = 0; i < myBitmap.Width; i++)
+            {
+                for (int j = 0; j < myBitmap.Height; j++)
+                {
+                    System.Drawing.Color pixelColor = myBitmap.GetPixel(i, j);
+                    Color pixel = new Color(pixelColor.R, pixelColor.G, pixelColor.B);
+                    image += colorPalette.colors.FindIndex(x => x.Contains(pixel));
+                }
+            }
+            return image;
+        }
+
+        public static List<byte> Compress(string uncompressed)
+        {
+            // build the dictionary
+            Dictionary<string, byte> dictionary = new Dictionary<string, byte>();
+            for (int i = '0'; i < '1'; i++)
+                dictionary.Add(((char)i).ToString(), (byte)i);
+
+            string w = string.Empty;
+            List<byte> compressed = new List<byte>();
+
+            foreach (char c in uncompressed)
+            {
+                string wc = w + c;
+                if (dictionary.ContainsKey(wc))
+                {
+                    w = wc;
+                }
+                else
+                {
+                    // write w to output
+                    compressed.Add(dictionary[w]);
+                    // wc is a new sequence; add it to the dictionary
+                    dictionary.Add(wc, (byte)dictionary.Count);
+                    w = c.ToString();
+                }
+            }
+
+            // write remaining output if necessary
+            if (!string.IsNullOrEmpty(w))
+                compressed.Add(dictionary[w]);
+
+            return compressed;
+        }
+
     }
 
     interface GetBytes
@@ -90,8 +248,8 @@ namespace kursovaya_rabota_3_semestr
     }
 
     // логический дескриптор экрана
-    class Descriptor: GetBytes
-    {        
+    class Descriptor : GetBytes
+    {
         // Ширина логического экрана
         public Int16 W;
         // Высота логического экрана
@@ -114,19 +272,19 @@ namespace kursovaya_rabota_3_semestr
 
 
         public byte getField()
-        {        
+        {
             byte field = 0b00000000;
             field |= Size;
-            field |= (byte)(SF<<3);
+            field |= (byte)(SF << 3);
             field |= (byte)(Color << 4);
             field |= (byte)(CT << 7);
             return (byte)field;
         }
-      
+
         public Descriptor()
-        {       
+        {
             W = 100;
-            H = 100;        
+            H = 100;
             CT = 1;
             Color = 7;
             SF = 1;
@@ -134,10 +292,10 @@ namespace kursovaya_rabota_3_semestr
             BG = 0x00;
             R = 0x00;
         }
-       
+
         public byte[] GetBytes()
         {
-            byte[] bytes = new byte[] { (byte)(W & 0xFF), 
+            byte[] bytes = new byte[] { (byte)(W & 0xFF),
                 (byte)((W >> 8) & 0xFF),
                 (byte)(H & 0xFF),
                 (byte)((H >> 8) & 0xFF),
@@ -158,8 +316,8 @@ namespace kursovaya_rabota_3_semestr
     }
 
     // Изображение
-    class Picture: GetBytes
-    {         
+    class Picture : GetBytes
+    {
         // Расширение управления графикой для анимации
         Extension extension;
         // Дескриптор изображения
@@ -182,11 +340,11 @@ namespace kursovaya_rabota_3_semestr
         public byte[] GetBytes()
         {
             var bytes = new List<byte>();
-            if(extension != null) bytes.AddRange(extension.GetBytes());
+            if (extension != null) bytes.AddRange(extension.GetBytes());
             if (localPallete != null) bytes.AddRange(localPallete.GetBytes());
             bytes.AddRange(pictureDescriptor.GetBytes());
             bytes.Add(MC);
-            foreach(SubblockPicture e in subblocks)
+            foreach (SubblockPicture e in subblocks)
             {
                 bytes.AddRange(e.GetBytes());
             }
@@ -195,7 +353,7 @@ namespace kursovaya_rabota_3_semestr
         }
     }
 
-    class SubblockPicture: GetBytes
+    class SubblockPicture : GetBytes
     {
         // Размер субблока (1-255 bytes)
         public byte S;
@@ -211,12 +369,12 @@ namespace kursovaya_rabota_3_semestr
         }
     }
 
-    class PictureDescriptor: GetBytes
+    class PictureDescriptor : GetBytes
     {
         // Разделитель изображений
         byte Separator = 0x2c; //(,)
         // Положение изображения по горизонтали
-        public int Left ;
+        public int Left;
         // Положение изображения по вертикали
         public int Top;
         // Ширина изображения 
@@ -271,17 +429,21 @@ namespace kursovaya_rabota_3_semestr
             G = _g;
             B = _b;
         }
+        public bool Contains(Color e)
+        {
+            return e.R == R && e.G == G && e.B == B;
+        }
     }
 
     // Цветовая палитра
-    class ColorPalette: GetBytes
+    class ColorPalette : GetBytes
     {
         public List<Color> colors = new List<Color>();
-        
+
         public byte[] GetBytes()
         {
             var bytes = new List<byte>();
-            foreach(Color e in colors)
+            foreach (Color e in colors)
             {
                 bytes.Add(e.R);
                 bytes.Add(e.G);

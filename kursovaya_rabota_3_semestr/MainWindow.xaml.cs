@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -31,13 +32,18 @@ namespace kursovaya_rabota_3_semestr
             Gif picture = new Gif();
             string writePath = @"simple.gif";
             byte[] file = picture.TestGenerate();
+            textBlock.Text =picture.text;
+
             try
             {
                 using (FileStream fstream = new FileStream(writePath, FileMode.OpenOrCreate))
                 {
+
                     await fstream.WriteAsync(file, 0, file.Length);
-                    fstream.Close();
+
+                  fstream.Close();
                 }
+  
             }
             catch (Exception )
             {
