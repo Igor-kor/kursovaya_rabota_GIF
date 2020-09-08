@@ -30,7 +30,7 @@ namespace kursovaya_rabota_3_semestr
         {
             Gif picture = new Gif();
             string writePath = @"simple.gif";
-            byte[] file = picture.Generate();
+            byte[] file = picture.TestGenerate();
             try
             {
                 using (FileStream fstream = new FileStream(writePath, FileMode.OpenOrCreate))
