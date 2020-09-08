@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,19 @@ namespace kursovaya_rabota_3_semestr
         private void button_Click(object sender, RoutedEventArgs e)
         {
             Gif picture = new Gif();
+            string writePath = @"simple.gif";
+            string text = picture.Generate();
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(writePath, false, System.Text.Encoding.Default))
+                {
+                    sw.WriteLine(text);
+                }
+            }
+            catch (Exception )
+            {
+
+            }
         }
-    }
+    }    
 }
