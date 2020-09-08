@@ -26,16 +26,17 @@ namespace kursovaya_rabota_3_semestr
             InitializeComponent();
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
+        private async void button_Click(object sender, RoutedEventArgs e)
         {
             Gif picture = new Gif();
             string writePath = @"simple.gif";
-            string text = picture.Generate();
+            byte[] file = picture.Generate();
             try
             {
-                using (StreamWriter sw = new StreamWriter(writePath, false, System.Text.Encoding.Default))
+                using (FileStream fstream = new FileStream(writePath, FileMode.OpenOrCreate))
                 {
-                    sw.WriteLine(text);
+                    await fstream.WriteAsync(file, 0, file.Length);
+                    fstream.Close();
                 }
             }
             catch (Exception )

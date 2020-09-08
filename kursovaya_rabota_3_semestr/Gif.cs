@@ -24,27 +24,29 @@ namespace kursovaya_rabota_3_semestr
         public Gif()
         {
             // Выбран GIF89a т.к. задание предпологает анимированное изображение
-            title = "GIF89a";         
+            title = "GIF89a";
             descriptor = new Descriptor();
             globalPalette = new ColorPalette();
             extensions = new Extension[] { };
             pictures = new Picture[] { };
         }
 
-        public string Generate()
+        public byte[] Generate()
         {
-            string extString = "";
+            var bytes = new List<byte>();
+            bytes.AddRange(Encoding.ASCII.GetBytes(title));
+            bytes.AddRange(descriptor.GetBytes());
             foreach(Extension e in extensions)
             {
-                extString += e.GetBytes();
+                bytes.AddRange(e.GetBytes());
             }
-            string pictureString = "";
             foreach (Picture e in pictures)
             {
-                pictureString += e.GetBytes();
-            }
-            //return title+descriptor.GetString()+globalPalette.GetString()+extString+pictureString+endfile;
-            return title+ Encoding.ASCII.GetString(descriptor.GetBytes()) +(char)endfile;
+                bytes.AddRange(e.GetBytes());
+            }         
+            bytes.Add(endfile);
+
+            return bytes.ToArray();
         }
     }
 
@@ -61,39 +63,51 @@ namespace kursovaya_rabota_3_semestr
         // Высота логического экрана
         Int16 H;
 
-        // Наличие глобальной палитры
-        int CT;
-        // Цветовое разрешение исходного изображения GIF89a
-        int Color;
-        // Палитра сортирована по значимости GIF89a
-        int SF;
-        // Размер глобальной палитры(количество цветов)
-        int Size;
+        // Наличие глобальной палитры(0-1)
+        byte CT;
+        // Цветовое разрешение исходного изображения GIF89a (0-7)
+        byte Color;
+        // Палитра сортирована по значимости GIF89a(0-1)
+        byte SF;
+        // Размер глобальной палитры(количество цветов)(0-7)
+        byte Size;
 
         // Номер цвета фона
         byte BG;
         // Соотношение сторон исходного изображения
         byte R;
+
+
+
+        public byte getField()
+        {        
+            byte field = 0b00000000;
+            field |= Size;
+            field |= (byte)(SF<<3);
+            field |= (byte)(Color << 4);
+            field |= (byte)(CT << 7);
+            return (byte)field;
+        }
       
         public Descriptor()
         {       
             W = 100;
-            H = 100;
+            H = 100;        
+            CT = 1;
+            Color = 7;
+            SF = 1;
+            Size = 7;
             BG = 0x00;
             R = 0x00;
-            CT = 0;
-            Size = 0;
-            Color = 0;
-            SF = 0;
         }
-        //data[0] = (byte) (width & 0xFF);   data[1] = (byte) ((width >> 8) & 0xFF);
+       
         public byte[] GetBytes()
         {
             byte[] bytes = new byte[] { (byte)(W & 0xFF), 
                 (byte)((W >> 8) & 0xFF),
                 (byte)(H & 0xFF),
                 (byte)((H >> 8) & 0xFF),
-                new byte(),
+                getField(),
                 BG,
                 R};
             return bytes;
