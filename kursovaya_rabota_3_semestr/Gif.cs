@@ -80,7 +80,7 @@ namespace kursovaya_rabota_3_semestr
             //Bitmap myBitmap = new Bitmap("Grapes.jpg");
             //globalPalette = GeneratePalette(myBitmap); 
             List<int> compresedbmp = Compress("0000222244445555");
-            List<int> sortcompress = new List<int>();
+          /*  List<int> sortcompress = new List<int>();
             for(int i = 0; i < compresedbmp.Count(); i+=2)
             {
                 if(i+1 == compresedbmp.Count())
@@ -92,11 +92,11 @@ namespace kursovaya_rabota_3_semestr
                     sortcompress.Add(compresedbmp[i + 1]);
                 }               
                 sortcompress.Add(compresedbmp[i]);
-            }
+            }*/
              pictures[0].MC = 0x03;
             string bincompress = "";
             int countrazryad = 1;
-            foreach(int e in sortcompress)
+            foreach(int e in compresedbmp)
             {
                 string temp = Convert.ToString(e, 2).ToString();
                 // если количество бит больше то увиличиваем размер блока
@@ -106,18 +106,19 @@ namespace kursovaya_rabota_3_semestr
                 {
                     temp = '0' + temp;
                 }
-                bincompress+= temp;
+                bincompress = temp+ bincompress;
             }
             // здесь нужно добавить нули до кратного 8 числа!!!!!!!
             while(bincompress.Length % 8 > 0)
             {
-                bincompress += '0';
+                bincompress = '0'+ bincompress;
             }
             int numOfBytes = bincompress.Length / 8;
             byte[] bmp = new byte[numOfBytes];
-            for (int i = 0; i < numOfBytes; ++i)
+            var countbmp = 0;
+            for (int i = numOfBytes-1; i >= 0; i--)
             {
-                bmp[i] = Convert.ToByte(bincompress.Substring(8 * i, 8), 2);
+                bmp[countbmp++] = Convert.ToByte(bincompress.Substring(8 * i, 8), 2);
             }
 
             int count = 0, countblock = 0 ;
@@ -138,7 +139,15 @@ namespace kursovaya_rabota_3_semestr
             /*10000000 10100000 00101101 00100100 10000010 00101100 11100101 01
              *00001000 00001010 11010010 01000010 01001000 01001101 01010110 01
              *00001000 00001010 11010010 01000010 01001000 01001100 10100101 01001000
+             *00001000 00001010 11010010 01000010 01001000 01001100 10101001 00101000
+             *00001000 00001010 11010010 01000010 01001000 010011001 0101001 00101000
+             *"0010 1010 0100 1011 0011 1000 0010 0001 0010 0001 0110 1101 0000 0100 0000 0000"
+             *"0000010101001001011001110000010000100100001011011010 0000 1000 0000"
+             *00000101 01001001 01100111 00000100 00100100 00101101 10100000 1000 0000
              *
+             * 00010010 01011001 10010100 10010000 01000010 11010010 00001010 00001000
+             *
+             *00001000 00001010 11010010 01000010 01001000 0
              *8 0 10 0 2 13 2 4 16 4 5 19 9 5
              *#8 #0 #10 #0 #2 #13 #2 #4 #16 #4 #5 #19 #5 #9
              *
@@ -151,7 +160,7 @@ namespace kursovaya_rabota_3_semestr
             1110 0101 5E 59
             01           12        
             */
-            text =  string.Join(" ", compresedbmp);
+            text = bincompress;
 
             descriptor.CT = 1;
             descriptor.SF = 0;
