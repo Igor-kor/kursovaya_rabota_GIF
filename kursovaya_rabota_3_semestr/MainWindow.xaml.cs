@@ -32,13 +32,12 @@ namespace kursovaya_rabota_3_semestr
             Gif picture = new Gif();
             string writePath = @"simple.gif";
             byte[] file = picture.TestGenerate();
-            textBlock.Text =picture.text;
+            textBox.Text =picture.text;
 
             try
             {
-                using (FileStream fstream = new FileStream(writePath, FileMode.OpenOrCreate))
+                using (FileStream fstream = new FileStream(writePath, FileMode.Truncate))
                 {
-
                     await fstream.WriteAsync(file, 0, file.Length);
 
                   fstream.Close();

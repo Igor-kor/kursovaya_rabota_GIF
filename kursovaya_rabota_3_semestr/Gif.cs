@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace kursovaya_rabota_3_semestr
@@ -56,7 +57,14 @@ namespace kursovaya_rabota_3_semestr
         {
             globalPalette = new ColorPalette();
             globalPalette.colors.Add(new Color(0x0A, 0xB2, 0x5D));
-           
+            globalPalette.colors.Add(new Color(0xC8, 0xA6, 0x2D));
+            globalPalette.colors.Add(new Color(0xF3, 0xED, 0x63));
+            globalPalette.colors.Add(new Color(0xBA, 0x60, 0xA5));
+            globalPalette.colors.Add(new Color(0x00, 0x80, 0xC8));
+            globalPalette.colors.Add(new Color(0xF1, 0x60, 0x22));
+            globalPalette.colors.Add(new Color(0x00, 0x00, 0x00));
+            globalPalette.colors.Add(new Color(0xFF, 0xFF, 0xFF));
+
 
             pictures[0].pictureDescriptor.Left = 0;
             pictures[0].pictureDescriptor.Top = 0;
@@ -69,83 +77,55 @@ namespace kursovaya_rabota_3_semestr
             
 
 
-            Bitmap myBitmap = new Bitmap("Grapes.jpg");
+            //Bitmap myBitmap = new Bitmap("Grapes.jpg");
             //globalPalette = GeneratePalette(myBitmap); 
-            List<byte> compresedbmp = Compress("0000000000000000000000000000000000000000000000000000000000000000" +
-                "0000000000000000000000000000000000000000000000000000000000000000" +
-                 "0000000000000000000000000000000000000000000000000000000000000000" +
-                  "0000000000000000000000000000000000000000000000000000000000000000" +
-                   "0000000000000000000000000000000000000000000000000000000000000000" +
-                    "0000000000000000000000000000000000000000000000000000000000000000" +
-                     "0000000000000000000000000000000000000000000000000000000000000000" +
-                      "0000000000000000000000000000000000000000000000000000000000000000" +
-                       "0000000000000000000000000000000000000000000000000000000000000000" +
-                        "0000000000000000000000000000000000000000000000000000000000000000" +
-                         "0000000000000000000000000000000000000000000000000000000000000000" +
-                          "0000000000000000000000000000000000000000000000000000000000000000" +
-                 "0000000000000000000000000000000000000000000000000000000000000000" +
-                  "0000000000000000000000000000000000000000000000000000000000000000" +
-                   "0000000000000000000000000000000000000000000000000000000000000000" +
-                    "0000000000000000000000000000000000000000000000000000000000000000" +
-                     "0000000000000000000000000000000000000000000000000000000000000000" +
-                      "0000000000000000000000000000000000000000000000000000000000000000" +
-                       "0000000000000000000000000000000000000000000000000000000000000000" +
-                        "0000000000000000000000000000000000000000000000000000000000000000" +
-                         "0000000000000000000000000000000000000000000000000000000000000000" +
-                          "0000000000000000000000000000000000000000000000000000000000000000" +
-                 "0000000000000000000000000000000000000000000000000000000000000000" +
-                  "0000000000000000000000000000000000000000000000000000000000000000" +
-                   "0000000000000000000000000000000000000000000000000000000000000000" +
-                    "0000000000000000000000000000000000000000000000000000000000000000" +
-                     "0000000000000000000000000000000000000000000000000000000000000000" +
-                      "0000000000000000000000000000000000000000000000000000000000000000" +
-                       "0000000000000000000000000000000000000000000000000000000000000000" +
-                        "0000000000000000000000000000000000000000000000000000000000000000" +
-                         "0000000000000000000000000000000000000000000000000000000000000000" +
-                          "0000000000000000000000000000000000000000000000000000000000000000" +
-                 "0000000000000000000000000000000000000000000000000000000000000000" +
-                  "0000000000000000000000000000000000000000000000000000000000000000" +
-                   "0000000000000000000000000000000000000000000000000000000000000000" +
-                    "0000000000000000000000000000000000000000000000000000000000000000" +
-                     "0000000000000000000000000000000000000000000000000000000000000000" +
-                      "0000000000000000000000000000000000000000000000000000000000000000" +
-                       "0000000000000000000000000000000000000000000000000000000000000000" +
-                        "0000000000000000000000000000000000000000000000000000000000000000" +
-                         "0000000000000000000000000000000000000000000000000000000000000000" +
-                          "0000000000000000000000000000000000000000000000000000000000000000" +
-                 "0000000000000000000000000000000000000000000000000000000000000000" +
-                  "0000000000000000000000000000000000000000000000000000000000000000" +
-                   "0000000000000000000000000000000000000000000000000000000000000000" +
-                    "0000000000000000000000000000000000000000000000000000000000000000" +
-                     "0000000000000000000000000000000000000000000000000000000000000000" +
-                      "0000000000000000000000000000000000000000000000000000000000000000" +
-                       "0000000000000000000000000000000000000000000000000000000000000000" +
-                        "0000000000000000000000000000000000000000000000000000000000000000" +
-                         "0000000000000000000000000000000000000000000000000000000000000000" +
-                          "0000000000000000000000000000000000000000000000000000000000000000" +
-                 "0000000000000000000000000000000000000000000000000000000000000000" +
-                  "0000000000000000000000000000000000000000000000000000000000000000" +
-                   "0000000000000000000000000000000000000000000000000000000000000000" +
-                    "0000000000000000000000000000000000000000000000000000000000000000" +
-                     "0000000000000000000000000000000000000000000000000000000000000000" +
-                      "0000000000000000000000000000000000000000000000000000000000000000" +
-                       "0000000000000000000000000000000000000000000000000000000000000000" +
-                        "0000000000000000000000000000000000000000000000000000000000000000" +
-                         "0000000000000000000000000000000000000000000000000000000000000000" +
-                         "0000000000000000000000000000000000000000000000000000000000000000" +
-                  "0000000000000000000000000000000000000000000000000000000000000000" +
-                   "0000000000000000000000000000000000000000000000000000000000000000" +
-                    "0000000000000000000000000000000000000000000000000000000000000000" );
-           
-            pictures[0].MC = 0x01;
+            List<int> compresedbmp = Compress("0000222244445555");
+            List<int> sortcompress = new List<int>();
+            for(int i = 0; i < compresedbmp.Count(); i+=2)
+            {
+                if(i+1 == compresedbmp.Count())
+                {
+                    //sortcompress.Add(0);
+                }
+                else
+                {
+                    sortcompress.Add(compresedbmp[i + 1]);
+                }               
+                sortcompress.Add(compresedbmp[i]);
+            }
+             pictures[0].MC = 0x03;
+            string bincompress = "";
+            int countrazryad = 1;
+            foreach(int e in sortcompress)
+            {
+                string temp = Convert.ToString(e, 2).ToString();
+                // если количество бит больше то увиличиваем размер блока
+                if (e >= Math.Pow(2, pictures[0].MC + countrazryad)) countrazryad++;
+                // если в блок не хватает бит то заполняем их нулями
+                while (temp.Length < pictures[0].MC+ countrazryad)
+                {
+                    temp = '0' + temp;
+                }
+                bincompress+= temp;
+            }
+            // здесь нужно добавить нули до кратного 8 числа!!!!!!!
+            while(bincompress.Length % 8 > 0)
+            {
+                bincompress += '0';
+            }
+            int numOfBytes = bincompress.Length / 8;
+            byte[] bmp = new byte[numOfBytes];
+            for (int i = 0; i < numOfBytes; ++i)
+            {
+                bmp[i] = Convert.ToByte(bincompress.Substring(8 * i, 8), 2);
+            }
 
-            byte[] bmp = compresedbmp.ToArray();
             int count = 0, countblock = 0 ;
             pictures[0].subblocks = new SubblockPicture[bmp.Length/256+1];
             for (int i = 0; i < bmp.Length; i+=256)
             {
                 pictures[0].subblocks[count] = new SubblockPicture();
-                pictures[0].subblocks[count].block = new byte[((bmp.Length - (count * 256)) > 256) ? 256:91] ;
+                pictures[0].subblocks[count].block = new byte[((bmp.Length - (count * 256)) > 256) ? 256: bmp.Length%256] ;
                 for(int k = i;k < i + 256 && k < bmp.Length; k++)
                 {
                     pictures[0].subblocks[count].block[k%256] = bmp[k];
@@ -153,21 +133,36 @@ namespace kursovaya_rabota_3_semestr
                 }
                 pictures[0].subblocks[0].S = (byte)(countblock);
                 count++;
-                countblock = 0;
+                //countblock = 0;
             }
-
-            text = BitConverter.ToString( compresedbmp.ToArray());
+            /*10000000 10100000 00101101 00100100 10000010 00101100 11100101 01
+             *00001000 00001010 11010010 01000010 01001000 01001101 01010110 01
+             *00001000 00001010 11010010 01000010 01001000 01001100 10100101 01001000
+             *
+             *8 0 10 0 2 13 2 4 16 4 5 19 9 5
+             *#8 #0 #10 #0 #2 #13 #2 #4 #16 #4 #5 #19 #5 #9
+             *
+            1000 0000 08
+            1010 0000 0A
+            0010 1101 D2
+            0010 0100 42
+            1000 0010 28 90
+            0010 1100 C2 94
+            1110 0101 5E 59
+            01           12        
+            */
+            text =  string.Join(" ", compresedbmp);
 
             descriptor.CT = 1;
             descriptor.SF = 0;
-            descriptor.Size = 0b01;
-            descriptor.Color = 0b01;
-            descriptor.W = (byte)myBitmap.Height;
-            descriptor.H = (byte)myBitmap.Width;
+            descriptor.Size = 0b010;
+            descriptor.Color = 0b010;
+            descriptor.W = (byte)4;
+            descriptor.H = (byte)4;
             //return Compress(GenerateImageWidthPalete(myBitmap, globalPalette)).ToArray();
 
-            pictures[0].pictureDescriptor.W = (byte)myBitmap.Height;
-            pictures[0].pictureDescriptor.H = (byte)myBitmap.Width;
+            pictures[0].pictureDescriptor.W = (byte)4;
+            pictures[0].pictureDescriptor.H = (byte)4;
 
             return Generate();
         }
@@ -206,16 +201,17 @@ namespace kursovaya_rabota_3_semestr
             return image;
         }
 
-        public static List<byte> Compress(string uncompressed)
+        public List<int> Compress(string uncompressed)
         {
             // build the dictionary
-            Dictionary<string, byte> dictionary = new Dictionary<string, byte>();
-            for (int i = '0'; i < '1'; i++)
-                dictionary.Add(((char)i).ToString(), (byte)i);
-
+            Dictionary<string, int> dictionary = new Dictionary<string, int>();         
+            for (int i = 0; i < globalPalette.colors.Count()+2; i++)
+            {
+                dictionary.Add((i).ToString(), i);
+            }         
             string w = string.Empty;
-            List<byte> compressed = new List<byte>();
-
+            List<int> compressed = new List<int>();
+            compressed.Add(dictionary[globalPalette.colors.Count().ToString()]);
             foreach (char c in uncompressed)
             {
                 string wc = w + c;
@@ -228,15 +224,15 @@ namespace kursovaya_rabota_3_semestr
                     // write w to output
                     compressed.Add(dictionary[w]);
                     // wc is a new sequence; add it to the dictionary
-                    dictionary.Add(wc, (byte)dictionary.Count);
+                    dictionary.Add(wc, dictionary.Count);
                     w = c.ToString();
                 }
             }
-
+            
             // write remaining output if necessary
             if (!string.IsNullOrEmpty(w))
                 compressed.Add(dictionary[w]);
-
+            compressed.Add(dictionary[(globalPalette.colors.Count() + 1).ToString()]);
             return compressed;
         }
 
