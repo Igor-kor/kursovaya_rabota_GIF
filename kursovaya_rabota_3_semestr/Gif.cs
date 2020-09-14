@@ -199,25 +199,27 @@ namespace kursovaya_rabota_3_semestr
 
   ;*/
 
-            string uncompress = "3-6-1-7-3-6-1-7-3-6-1-7-3-6-1-7";
-
-            List<int> compresedbmp = Compress(uncompress); 
-           /* List<int> compresedbmp = Compress(
-              "0-0-0-0-0-2-2-2-2-2-2-0-0-0-0-0-0-0-0-2-2-1-1-1-1-1-1-2-2-0-0-0-"+
-              "0-0-2-1-1-1-1-1-1-1-1-1-1-2-0-0-0-2-1-1-1-1-1-1-1-1-1-1-1-1-2-0-"+
-              "0-2-1-1-1-2-2-1-1-2-2-1-1-1-2-0-2-1-1-1-1-2-2-1-1-2-2-1-1-1-1-2-"+
-              "2-1-1-1-1-2-2-1-1-2-2-1-1-1-1-2-2-1-1-1-1-2-2-1-1-2-2-1-1-1-1-2-"+
-              "2-1-1-1-1-1-1-1-1-1-1-1-1-1-1-2-2-1-1-1-1-1-1-1-1-1-1-1-1-1-1-2-"+
-              "2-1-1-1-2-1-1-1-1-1-1-2-1-1-1-2-0-2-1-1-1-2-1-1-1-1-2-1-1-1-2-0-"+
-              "0-2-1-1-1-1-2-2-2-2-1-1-1-1-2-0-0-0-2-1-1-1-1-1-1-1-1-1-1-2-0-0-"+
-              "0-0-0-2-2-1-1-1-1-1-1-2-2-0-0-0-0-0-0-0-0-0-2-2-2-2-2-2-0-0-0-0");*/
-
-
+            //string uncompress = "3-6-1-7-3-6-1-7-3-6-1-7-3-6-1-7";
+            string uncompress = "3617361736173617361736173617361736173617361736173617361736173617";
+            LZWEncoder encoder = new LZWEncoder();
+            //text = encoder.Encode(uncompress);
+            //return new byte[] { };
+            //List<int> compresedbmp = Compress(uncompress);
+            //List<byte> compresedbmp = encoder.EncodeToByteList(uncompress).ToList();
+            /* List<int> compresedbmp = Compress(
+               "0-0-0-0-0-2-2-2-2-2-2-0-0-0-0-0-0-0-0-2-2-1-1-1-1-1-1-2-2-0-0-0-"+
+               "0-0-2-1-1-1-1-1-1-1-1-1-1-2-0-0-0-2-1-1-1-1-1-1-1-1-1-1-1-1-2-0-"+
+               "0-2-1-1-1-2-2-1-1-2-2-1-1-1-2-0-2-1-1-1-1-2-2-1-1-2-2-1-1-1-1-2-"+
+               "2-1-1-1-1-2-2-1-1-2-2-1-1-1-1-2-2-1-1-1-1-2-2-1-1-2-2-1-1-1-1-2-"+
+               "2-1-1-1-1-1-1-1-1-1-1-1-1-1-1-2-2-1-1-1-1-1-1-1-1-1-1-1-1-1-1-2-"+
+               "2-1-1-1-2-1-1-1-1-1-1-2-1-1-1-2-0-2-1-1-1-2-1-1-1-1-2-1-1-1-2-0-"+
+               "0-2-1-1-1-1-2-2-2-2-1-1-1-1-2-0-0-0-2-1-1-1-1-1-1-1-1-1-1-2-0-0-"+
+               "0-0-0-2-2-1-1-1-1-1-1-2-2-0-0-0-0-0-0-0-0-0-2-2-2-2-2-2-0-0-0-0");*/
 
             pictures[0].MC = 0x03;
-            string bincompress = "";
+            string bincompress = encoder.Encode(uncompress);
             int countrazryad = 1;
-            foreach (int e in compresedbmp)
+            /*foreach (byte e in compresedbmp)
             {
                 string temp = Convert.ToString(e, 2).ToString();
                 // если количество бит больше то увиличиваем размер блока
@@ -228,19 +230,25 @@ namespace kursovaya_rabota_3_semestr
                     temp = '0' + temp;
                 }
                 bincompress = temp + bincompress;
-            }
+            }*/
             // здесь нужно добавить нули до кратного 8 числа!!!!!!!
             while (bincompress.Length % 8 > 0)
             {
                 bincompress = '0' + bincompress;
             }
             int numOfBytes = bincompress.Length / 8;
-            byte[] bmp = new byte[numOfBytes];
+            byte[] bmp = new byte[numOfBytes/2];
             var countbmp = 0;
-            for (int i = numOfBytes - 1; i >= 0; i--)
+            for (int i = 0; i < numOfBytes; i+=2)
             {
-                bmp[countbmp++] = Convert.ToByte(bincompress.Substring(8 * i, 8), 2);
+                bmp[countbmp++] = Convert.ToByte( bincompress.Substring(8 * (i+1)+4, 4) + bincompress.Substring(8 * i + 4, 4), 2);
             }
+            // 38-16-A7-EC-BD-97
+            // 38-16-A7-EC-BD-97
+            //38-33-36-31-37-0A-0C-0E-0D-0B-37-39
+
+            //83-61-7A-CE-DB-79-00-00-00-00-00-00
+            text = BitConverter.ToString(bmp);
 
             int count = 0, countblock = 0;
             int blockmaxsize = 255;
@@ -276,10 +284,10 @@ namespace kursovaya_rabota_3_semestr
             pictures[0].pictureDescriptor.W = (byte)myBitmap.Width;
             pictures[0].pictureDescriptor.H = (byte)myBitmap.Height;*/
 
-            descriptor.W = (byte)10;
-            descriptor.H = (byte)10;
-            pictures[0].pictureDescriptor.W = (byte)10;
-            pictures[0].pictureDescriptor.H = (byte)10;
+            descriptor.W = (byte)4;
+            descriptor.H = (byte)16;
+            pictures[0].pictureDescriptor.W = (byte)4;
+            pictures[0].pictureDescriptor.H = (byte)16;
 
             return Generate();
         }
@@ -341,28 +349,14 @@ namespace kursovaya_rabota_3_semestr
                 else
                 {
                     // write w to output
-                    compressed.Add(dictionary[w]);
-                    text += dictionary[w].ToString()+" "+w+" \n";
+                    compressed.Add(dictionary[w]);                 
                     // wc is a new sequence; add it to the dictionary
                     dictionary.Add(wc, dictionary.Count);
                     w = c.ToString();
                 }
             }
 
-            // write remaining output if necessary  
-            /* 1-1-1-0-1-1-1-0-1-1-1-0-1-1-1-0-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-
-3 3 
-6 6 
-1 1 
-7 7 
-10 36 
-12 17 
-14 361 
-13 73 
-11 61 
 
-
-             * */
             if (!string.IsNullOrEmpty(w))
                 compressed.Add(dictionary[w]);
             compressed.Add(dictionary[(globalPalette.colors.Count() + 1).ToString()]);
