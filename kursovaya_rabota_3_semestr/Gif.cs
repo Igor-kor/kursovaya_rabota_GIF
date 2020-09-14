@@ -80,16 +80,17 @@ namespace kursovaya_rabota_3_semestr
 
             Bitmap myBitmap = new Bitmap("Grapes.gif");
             globalPalette = GeneratePalette(myBitmap);
-            string bincompress = Compress(GenerateImageWidthPalete(myBitmap,globalPalette));
+            string bincompress = Compress(GenerateImageWidthPalete(myBitmap, globalPalette));
             string uncomp = "";
             int hw = 64;
             for (int i = 0; i < (hw * hw); i++)
             {
-                uncomp += (i%8).ToString();
+                uncomp += ((char)(i % 8)).ToString();
             }
 
             //string bincompress = Compress(uncomp);
-            pictures[0].MC = 3;
+            // максимальное значение 8, TODO: сейчас только 7!
+            pictures[0].MC = (byte)getBitsCount(globalPalette.colors.Count());
 
             // здесь нужно добавить нули до кратного 8 числа!!!!!!!  
             while (bincompress.Length % 8 > 0)
@@ -104,15 +105,15 @@ namespace kursovaya_rabota_3_semestr
                 bmp[countbmp++] = Convert.ToByte(bincompress.Substring(8 * i, 8), 2);
             }
 
-            int count = 0,countS =0;
+            int count = 0, countS = 0;
             int sizeblock = 255;
-            pictures[0].subblocks = new SubblockPicture[bmp.Length / sizeblock + 1];          
+            pictures[0].subblocks = new SubblockPicture[bmp.Length / sizeblock + 1];
             for (int i = 0; i < bmp.Length; i += sizeblock)
             {
                 pictures[0].subblocks[count] = new SubblockPicture();
                 for (int k = i; k < (i + sizeblock) && k < bmp.Length; k++)
                 {
-                    pictures[0].subblocks[count].block[k-i] = bmp[k];
+                    pictures[0].subblocks[count].block[k - i] = bmp[k];
                     countS++;
                 }
                 pictures[0].subblocks[count].S = (byte)countS;
@@ -125,19 +126,19 @@ namespace kursovaya_rabota_3_semestr
             descriptor.CT = 1;
             descriptor.SF = 0;
             descriptor.Size = (byte)(getBitsCount(globalPalette.colors.Count()) - 1);
-            descriptor.Color = (byte)3;
-            /* descriptor.W = (byte)myBitmap.Width;
-             descriptor.H = (byte)myBitmap.Height;        
+            descriptor.Color = (byte)5;
+            descriptor.W = (byte)myBitmap.Width;
+            descriptor.H = (byte)myBitmap.Height;
 
-             pictures[0].pictureDescriptor.W = (byte)myBitmap.Width;
-             pictures[0].pictureDescriptor.H = (byte)myBitmap.Height;*/
-
+            pictures[0].pictureDescriptor.W = (byte)myBitmap.Width;
+            pictures[0].pictureDescriptor.H = (byte)myBitmap.Height;
+            /*
             descriptor.W = hw;
             descriptor.H = hw;
 
             pictures[0].pictureDescriptor.W = hw;
             pictures[0].pictureDescriptor.H = hw;
-
+            */
             return Generate();
         }
 
@@ -146,17 +147,19 @@ namespace kursovaya_rabota_3_semestr
             ColorPalette colorPalette = new ColorPalette();
             colorPalette.colors = new List<Color>();
             for (int i = 0; i < myBitmap.Width; i++)
-            {
-                for (int j = 0; j < myBitmap.Height; j++)
-                {
-                    System.Drawing.Color pixelColor = myBitmap.GetPixel(i, j);
-                    Color pixel = new Color(pixelColor.R, pixelColor.G, pixelColor.B);
-                    if (colorPalette.colors.Find(x => x.Contains(pixel)) == null)
-                    {
-                        colorPalette.colors.Add(pixel);
-                    }
-                }
-            }
+             {
+                 for (int j = 0; j < myBitmap.Height; j++)
+                 {
+                     System.Drawing.Color pixelColor = myBitmap.GetPixel(i, j);
+                     Color pixel = new Color(pixelColor.R, pixelColor.G, pixelColor.B);
+                     if (colorPalette.colors.FindIndex(p=>p.Contains(pixel)) ==-1)
+                     {
+                         colorPalette.colors.Add(pixel);
+                     }
+                 }
+             }      
+            //количество цветов в палитре должно быть кратным степени 2
+            while(colorPalette.colors.Count()<Math.Pow(2,getBitsCount(colorPalette.colors.Count()))) colorPalette.colors.Add(new Color(0,0,0));
             return colorPalette;
         }
 
@@ -167,7 +170,7 @@ namespace kursovaya_rabota_3_semestr
             {
                 for (int j = 0; j < myBitmap.Height; j++)
                 {
-                    System.Drawing.Color pixelColor = myBitmap.GetPixel(i, j);
+                    System.Drawing.Color pixelColor = myBitmap.GetPixel(j,i );
                     Color pixel = new Color(pixelColor.R, pixelColor.G, pixelColor.B);
                     image += (char)colorPalette.colors.FindIndex(x => x.Contains(pixel));
                 }
@@ -181,11 +184,11 @@ namespace kursovaya_rabota_3_semestr
             Dictionary<string, int> dictionary = new Dictionary<string, int>();
             for (int i = 0; i < globalPalette.colors.Count() + 2; i++)
             {
-                dictionary.Add((i).ToString(), i);
+                dictionary.Add(((char)i).ToString(), i);
             }
             string w = string.Empty;
             string bincompress = "";
-            bincompress = Bincompress(dictionary[(globalPalette.colors.Count()).ToString()], dictionary.Count) + bincompress;
+            bincompress = Bincompress(dictionary[((char)globalPalette.colors.Count()).ToString()], dictionary.Count) + bincompress;
             foreach (char c in uncompressed)
             {
                 string wc = w + c;
@@ -199,22 +202,22 @@ namespace kursovaya_rabota_3_semestr
                     // wc is a new sequence; add it to the dictionary
                     dictionary.Add(wc, dictionary.Count);
                     w = c.ToString();
-                   if(getBitsCount(dictionary.Count) == 12)
+                    if (getBitsCount(dictionary.Count) == 12)
                     {
                         w = string.Empty;
                         dictionary.Clear();
                         for (int i = 0; i < globalPalette.colors.Count() + 2; i++)
                         {
-                            dictionary.Add((i).ToString(), i);
+                            dictionary.Add(((char)i).ToString(), i);
                         }
-                        bincompress = Bincompress(dictionary[(globalPalette.colors.Count()).ToString()], dictionary.Count) + bincompress;
+                        bincompress = Bincompress(dictionary[((char)globalPalette.colors.Count()).ToString()], dictionary.Count) + bincompress;
                     }
                 }
             }
             // write remaining output if necessary
             if (!string.IsNullOrEmpty(w))
                 bincompress = Bincompress(dictionary[w], dictionary.Count) + bincompress;
-            bincompress = Bincompress(dictionary[((globalPalette.colors.Count() + 1)).ToString()], dictionary.Count) + bincompress;
+            bincompress = Bincompress(dictionary[((char)(globalPalette.colors.Count() + 1)).ToString()], dictionary.Count) + bincompress;
             return bincompress;
         }
         static int getBitsCount(int alfabetLength)
@@ -229,7 +232,7 @@ namespace kursovaya_rabota_3_semestr
             while (temp.Length < getBitsCount(countrazryad))
             {
                 temp = '0' + temp;
-            }         
+            }
             return temp;
         }
 
@@ -362,8 +365,8 @@ namespace kursovaya_rabota_3_semestr
         public byte[] GetBytes()
         {
             var bytes = new List<byte>();
-            bytes.Add(S);        
-            for(int i =0; i < S; i++)
+            bytes.Add(S);
+            for (int i = 0; i < S; i++)
             {
                 bytes.Add(block[i]);
             }
